@@ -44,7 +44,13 @@ async function downloadVideo() {
 
     } catch (e) {
         console.error(e);
-        alert("An error occurred while downloading the video. Please try again later.");
+        let errorMessage = "An error occurred while downloading the video. Please try again later.";
+        
+        if (e.message) {
+            errorMessage = e.message;
+        }
+        
+        alert(errorMessage);
     } finally {
         container.style.display = 'none';
     }
@@ -58,6 +64,20 @@ async function getVideoMetadata() {
 
     if (deliveryId == null)
         throw new Error("Unable to get delivery Id");
+
+    // Get CSRF token from cookie
+    let csrfToken = "";
+    const cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+        if (cookie.startsWith("csrfToken=")) {
+            csrfToken = cookie.substring("csrfToken=".length);
+            break;
+        }
+    }
+
+    if (!csrfToken) {
+        throw new Error("CSRF token not found. Please ensure you're logged in to Panopto.");
+    }
 
     let params = new URLSearchParams();
     params.append("deliveryId", deliveryId);
@@ -73,7 +93,7 @@ async function getVideoMetadata() {
         body: params,
         credentials: "include",
         headers: {
-            "X-Csrf-Token": document.cookie.split("; csrfToken=")[1].split(";")[0]
+            "X-Csrf-Token": csrfToken
         },
         method: "POST",
         signal: null
@@ -81,6 +101,10 @@ async function getVideoMetadata() {
 
     let response = await PanoptoApiClient.doFetch(PanoptoApiClient.getAppRootUrl() +  "/Pages/Viewer/DeliveryInfo.aspx", request);
     let responseBody = await response.json();
+
+    if (!responseBody || !responseBody.Delivery || !responseBody.Delivery.Streams || responseBody.Delivery.Streams.length === 0) {
+        throw new Error("Video stream information not found. The video may not be available for download.");
+    }
 
     let metaData = {
         fileName: responseBody.Delivery.Streams[0].Name,

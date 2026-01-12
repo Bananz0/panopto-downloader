@@ -1,7 +1,12 @@
-const frameSubstring = "hosted.panopto.com";
+// Support both .panopto.com and .panopto.eu domains
+const panoptoFramePatterns = [/\.panopto\.com/, /\.panopto\.eu/];
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function isPanoptoFrame(url) {
+    return panoptoFramePatterns.some(pattern => pattern.test(url));
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -14,7 +19,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 async function executeInsertScript(tabId) {
     const frames = await chrome.webNavigation.getAllFrames({ tabId: tabId });
-    let frameIds = frames.filter((f) => f.url.includes(frameSubstring)).map((f) => f.frameId);
+    let frameIds = frames.filter((f) => isPanoptoFrame(f.url)).map((f) => f.frameId);
     if (frameIds.length == 0)
         return;
 

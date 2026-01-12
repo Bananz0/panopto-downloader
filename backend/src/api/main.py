@@ -18,7 +18,7 @@ app = FastAPI(root_path=root_path)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://.*\.hosted\.panopto\.com",
+    allow_origin_regex=r"https://.*\.panopto\.(com|eu)",
     allow_methods=["*"],
     allow_headers=["*"],
 )

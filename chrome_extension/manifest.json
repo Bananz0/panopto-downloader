@@ -1,7 +1,7 @@
 {
     "name": "Panopto Downloader",
-    "description": "Download videos from Panopto, including when embedded in Canvas/Instructure.",
-    "version": "1.0.2",
+    "description": "Download videos from Panopto, including when embedded in Canvas/Instructure or Blackboard. Supports both US and EU instances.",
+    "version": "1.1.0",
     "manifest_version": 3,
     "icons": {
         "16": "images/icon-16.png",
@@ -14,8 +14,10 @@
         "scripting"
     ],
     "host_permissions": [
-        "https://*.hosted.panopto.com/*",
-        "https://*.instructure.com/*"
+        "https://*.panopto.com/*",
+        "https://*.panopto.eu/*",
+        "https://*.instructure.com/*",
+        "https://*.blackboard.com/*"
     ],
     "background": {
         "service_worker": "scripts/background.js",
@@ -27,21 +29,28 @@
             "js": ["scripts/viewer-content.js"],
             "css": ["scripts/viewer-styles.css"],
             "matches": [
-                "https://*.hosted.panopto.com/Panopto/Pages/Viewer.aspx*"
+                "https://*.panopto.com/Panopto/Pages/Viewer.aspx*",
+                "https://*.panopto.eu/Panopto/Pages/Viewer.aspx*"
             ]
         },
         {
             "js": ["scripts/embed-content.js"],
             "css": ["scripts/embed-styles.css"],
             "matches": [
-                "https://*.instructure.com/*"
+                "https://*.instructure.com/*",
+                "https://*.blackboard.com/*"
             ]
         }
     ],
     "web_accessible_resources": [
         {
             "resources": ["scripts/popup.html", "scripts/handle-click.js", "scripts/embed-styles.css"],
-            "matches": ["https://*.hosted.panopto.com/*", "https://*.instructure.com/*"]
+            "matches": [
+                "https://*.panopto.com/*",
+                "https://*.panopto.eu/*",
+                "https://*.instructure.com/*",
+                "https://*.blackboard.com/*"
+            ]
         }
     ]
   }
