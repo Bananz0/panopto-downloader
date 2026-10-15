@@ -1,5 +1,5 @@
 
-const apiUrl = "https://pd.travbend.com/panopto-downloader/api/v1/convert-to-mp4";
+const apiUrl = "http://localhost:80/panopto-downloader/api/v1/convert-to-mp4";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -1,7 +1,7 @@
 # Panopto Downloader
 Panopto Downloader Chrome Extension
 
-Allows users to download videos from the Panopto video platform for offline use, including videos embedded in the Canvas/Instructure educational platform.
+Allows users to download videos from the Panopto video platform for offline use, including videos embedded in the Canvas/Instructure or Blackboard educational platforms. Supports both US (.panopto.com) and EU (.panopto.eu) regional instances.
 
 
 ![Downloading Example 1](https://www.travbend.com/panopto-downloader-example-1.png)
